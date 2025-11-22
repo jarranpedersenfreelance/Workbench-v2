@@ -6,7 +6,7 @@ import sys
 import subprocess
 from typing import LiteralString
 
-COMMANDS = ['local']
+COMMANDS = ['install', 'local']
 
 class DeployScript:
     """Class for the workbench deploy script"""
@@ -38,11 +38,18 @@ class DeployScript:
         """Installs dependencies from requirements.txt."""
         print("Installing dependencies...")
         command = [self._pip, "install", "-r", "requirements.txt"]
-        subprocess.run(command, check=False)
+        subprocess.run(command, check=True, stdout=subprocess.DEVNULL)
     
     def _command_local(self):
-        print('Deploy Local')
-    
+        print("Running local flask server in debug mode...")
+        command = [self._python, "-m", "flask", "--app", "api.app", "run", "--debug"]
+        try:
+            subprocess.run(command, check=True)
+        except KeyboardInterrupt:
+            print("\nServer stopped.")
+
+    def _command_install(self):
+        print("Python modules installed.")
 
 if __name__ == '__main__':
     script = DeployScript()

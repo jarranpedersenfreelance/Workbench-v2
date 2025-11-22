@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Workbench</title>
+    <link rel="stylesheet" href="static/styles.css">
+    <link rel="icon" type="image/png" href="static/favicon.png" />
+</head>
+<body>
+    <div class="container">
+        <h1>Jarran's Projects</h1>
+        
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Project Name</th>
+                        <th>Project Link</th>
+                        <th>Github Link</th>
+                        <th>Status</th>
+                        <th>Last Commit</th>
+                    </tr>
+                </thead>
+                <tbody id="project-table-body">
+                {% for project in projects %}
+                    <tr data-repo="{{ projects[project]['github-repo'] }}">
+                        <td>{{ project }}</td>
+                        <td></td>
+                        <td class="github-link"></td>
+                        <td>
+                            {% if projects[project]['status'] == 'Complete' %}
+                            <span class="status status-success">
+                            {% else %}
+                            <span class="status status-warning">
+                            {% endif %}
+                                {{ projects[project]['status'] }}
+                            </span>
+                        </td>
+                        <td class="last-commit-time">Loading...</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+<script src="static/index_script.js"></script>
+</body>
+</html>
