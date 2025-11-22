@@ -14,6 +14,11 @@ class DeployScript:
     def __init__(self):
         self._command = self._get_command()
         self._python, self._pip = self._ensure_venv()
+        self._install_requirements()
+
+    def run(self):
+        handle_func = getattr(self, f"_command_{self._command.lower()}")
+        handle_func()
 
     def _get_command(self) -> str:
         parser = argparse.ArgumentParser(description="Workbench deploy script.")
@@ -28,9 +33,15 @@ class DeployScript:
             print("Creating local virtual environment (.venv)...")
             subprocess.run([sys.executable, "-m", "venv", ".venv"], check=True)
         return os.path.join(".venv", "bin", "python"), os.path.join(".venv", "bin", "pip")
-
-    def run(self):
-        print(f'command: {self._command}')
+    
+    def _install_requirements(self):
+        """Installs dependencies from requirements.txt."""
+        print("Installing dependencies...")
+        command = [self._pip, "install", "-r", "requirements.txt"]
+        subprocess.run(command, check=False)
+    
+    def _command_local(self):
+        print('Deploy Local')
     
 
 if __name__ == '__main__':
